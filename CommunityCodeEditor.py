@@ -1,6 +1,7 @@
 # *NOTES
 # Style Menu and add better User Interface
 # Make a drop down menu for the help option for settings
+# Work on menu options
 
 
 # Imports
