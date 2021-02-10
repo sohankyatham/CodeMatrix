@@ -1,9 +1,4 @@
-# *NOTES
-# Style Menu and add better User Interface
-# Make a drop down menu for the help option for settings
-# Work on menu options
-
-
+# WORK ON MAKING TABS WHEN NEW FILE FUNCTION IS PASSED. WHEN CLOSE FILE FUNCTION IS PASSED CLOSE THE TAB. OPEN, SAVE, AND SAVE AS FILES IN THE AcTIVE TAB.
 # Imports
 from tkinter import *
 from tkinter import filedialog
@@ -15,7 +10,7 @@ from tkinter import ttk
 # Screen
 root = Tk()
 root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))                       
-root.title("Code Editor - Untitled.txt")           # Edit name when needed
+root.title("Code Editor - Untitled.txt")           # Edit name of IDE 
 
 
 
@@ -41,8 +36,7 @@ def NewFile(*args):
     global OpenFileStatusName
     OpenFileStatusName = False                 
     # Create a New Tab when new file function occurs
-    TextBox.delete("1.0", END)               
-    StatusBar.config(text="Code Editor - Untitled.txt")       
+    TextBox.delete("1.0", END)                    
 root.bind('<Control-n>', NewFile)
 
 
@@ -228,15 +222,17 @@ MenuBar.config(bg="White", fg="Black", activebackground="Whitesmoke", activefore
 FileOption = Menu(MenuBar, tearoff=False)
 MenuBar.add_cascade(label="File", menu=FileOption, underline=0)
 FileOption.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
-FileOption.add_command(label="New File", command=NewFile, accelerator="Ctrl+n")
-FileOption.add_command(label="New Window", command=None, accelerator="Ctrl+Shift+N")
-FileOption.add_separator()
-FileOption.add_command(label="Open File", command=OpenFile, accelerator="Ctrl+o")
+# Make the new option a drop down with options like: Make new file from template, 
+FileOption.add_command(label="New File", command=NewFile, accelerator="Ctrl+N")
+FileOption.add_command(label="Open File", command=OpenFile, accelerator="Ctrl+O")
 FileOption.add_command(label="Open Folder", command=None, accelerator="Ctrl+Shift+O")
 FileOption.add_command(label="Open Recent", command=None)
 FileOption.add_separator()
-FileOption.add_command(label="Save File", command=SaveFile, accelerator="Ctrl+s")
+FileOption.add_command(label="Save File", command=SaveFile, accelerator="Ctrl+S")
 FileOption.add_command(label="Save As", command=SaveFileAs, accelerator="Ctrl+Shift+S")
+FileOption.add_separator()
+FileOption.add_command(label="Revert File", commmand=None)
+FileOption.add_command(label="Close Editor", command=None, accelerator="Ctrl+W")
 FileOption.add_separator()
 FileOption.add_command(label="Exit", command=root.quit)
 
@@ -246,17 +242,20 @@ FileOption.add_command(label="Exit", command=root.quit)
 EditOption = Menu(MenuBar, tearoff=False)
 MenuBar.add_cascade(label="Edit", menu=EditOption, underline=0)
 EditOption.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
-EditOption.add_command(label="Undo", command=TextBox.edit_undo, accelerator="Ctrl+z")
-EditOption.add_command(label="Redo", command=TextBox.edit_redo, accelerator="Ctrl+y")
+EditOption.add_command(label="Undo", command=TextBox.edit_undo, accelerator="Ctrl+Z")
+EditOption.add_command(label="Redo", command=TextBox.edit_redo, accelerator="Ctrl+Y")
 EditOption.add_separator()
-EditOption.add_command(label="Cut", command=lambda: CutText(False), accelerator="Ctrl+x")
-EditOption.add_command(label="Copy", command=lambda: CopyText(False), accelerator="Ctrl+c")
-EditOption.add_command(label="Paste", command=lambda: PasteText(False), accelerator="Ctrl+v")
+EditOption.add_command(label="Cut", command=lambda: CutText(False), accelerator="Ctrl+X")
+EditOption.add_command(label="Copy", command=lambda: CopyText(False), accelerator="Ctrl+C")
+EditOption.add_command(label="Paste", command=lambda: PasteText(False), accelerator="Ctrl+V")
 EditOption.add_separator()
-EditOption.add_command(label="Find", command=None, accelerator="Ctrl+f")
-EditOption.add_command(label="Replace", command=None, accelerator="Ctrl+h")
+EditOption.add_command(label="Find", command=None, accelerator="Ctrl+F")
+EditOption.add_command(label="Replace", command=None, accelerator="Ctrl+H")
 EditOption.add_separator()
-EditOption.add_command(label="Select All", command=lambda: SelectAll(True), accelerator="Ctrl+a")
+EditOption.add_command(label="Toggle Line Comment")
+EditOption.add_command(label="Toggle Block Comment")
+EditOption.add_separator()
+EditOption.add_command(label="Select All", command=lambda: SelectAll(True), accelerator="Ctrl+A")
 
 
 
@@ -275,6 +274,7 @@ ToolsOption = Menu(MenuBar, tearoff=False)
 MenuBar.add_cascade(label="Tools", menu=ToolsOption) 
 ToolsOption.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
 ToolsOption.add_command(label="Toggle Word Wrap", command=WordWrap)
+ToolsOption.add_command(label="Character Count", command=None)
 
 
 
@@ -300,9 +300,6 @@ SettingsMenu.add_command(label="Keyboard Shortcuts", command=None)
 # Right Click Menu
 RightClickMenu = Menu(TextBox, tearoff=False)
 RightClickMenu.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
-RightClickMenu.add_command(label="Undo", command=TextBox.edit_undo, accelerator="Ctrl+z")
-RightClickMenu.add_command(label="Redo", command=TextBox.edit_redo, accelerator="Ctrl+y")
-RightClickMenu.add_separator()
 RightClickMenu.add_command(label="Cut", command=lambda: CutText(False), accelerator="Ctrl+x")
 RightClickMenu.add_command(label="Copy", command=lambda: CopyText(False), accelerator="Ctrl+c")
 RightClickMenu.add_command(label="Paste", command=lambda: PasteText(False), accelerator="Ctrl+v")
