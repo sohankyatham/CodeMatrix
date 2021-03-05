@@ -191,6 +191,7 @@ root.bind("<Control-Key-a>", SelectAll)
 
 
 # Word Count Function
+# Character Count and word count in the status bar
 def WordCount():
     pass
 
@@ -201,9 +202,12 @@ def ToggleWordWrap(*args):
     # If there is no word wrap then add word wrap
     if TextBox.cget("wrap") == "none":
         TextBox.configure(wrap="word")
+        WordWrap_CheckMark.set(True)
+
     # If there is word wrap then take out word wrap
     elif TextBox.cget("wrap") == "word":
         TextBox.configure(wrap="none")
+        WordWrap_CheckMark.set(False)
 root.bind("<Alt-Key-z>", ToggleWordWrap)
 
 
