@@ -122,7 +122,7 @@ def ColorTheme():
     
     # Default Theme
     def DefaultTheme():
-        TextBox.config(bg="White", fg="Black")
+        TextBox.config(bg="White", fg="White")
         MenuBar.config(bg="White", fg="Black")
         StatusBar.config(bg="dodgerblue")
 
@@ -133,22 +133,39 @@ def ColorTheme():
     def LightTheme():
         TextBox.config(bg="Whitesmoke", fg="Black")
         MenuBar.config(bg="White", fg="Black")
-        StatusBar.config(bg="dodgerblue")
+        StatusBar.config(bg="White")
 
     LightThemeBtn = Button(ColorThemeWindow, text="Light Theme", command=LightTheme)
     LightThemeBtn.pack()
 
     # Dark Theme
     def DarkTheme():
-        TextBox.config(bg="#332a2a", fg="White")
-        MenuBar.config(bg="Black", fg="White")
+        TextBox.config(bg="Black", fg="White")
+        MenuBar.config(bg="#332a2a", fg="White")
         StatusBar.config(bg="dodgerblue")
 
     DarkThemeBtn = Button(ColorThemeWindow, text="Dark Theme", command=DarkTheme)
     DarkThemeBtn.pack()
-    
+
+    # Blue Theme
+    def BlueTheme():
+        TextBox.config(bg="#187980", fg="White")
+        MenuBar.config(bg="White", fg="Black")
+        StatusBar.config(bg="dodgerblue")
+
+    BlueThemeBtn = Button(ColorThemeWindow, text="Blue Theme", command=BlueTheme)
+    BlueThemeBtn.pack()
     # Main Loop for Color Theme
     ColorThemeWindow.mainloop()
+
+
+
+# Close Editor Function
+def CloseEditor(*args):
+    global OpenFileStatusName
+    OpenFileStatusName = False
+    TextBox.delete("1.0", END)
+root.bind("<Control-Key-w>", CloseEditor)
 
 
 
@@ -217,16 +234,43 @@ def SelectAll(e):
     TextBox.tag_add("sel", 1.0, "end")
 root.bind("<Control-Key-a>", SelectAll)
  
- 
 
-# Tools Menu Option
+
+# Run Python Menu Options
+def RunPythonFile(*args):
+    Open_File_To_Run = filedialog.askopenfile(mode="r", title="Select Python File to Run")
+    exec(Open_File_To_Run.read())
+
+
+
+def ToggleLineComment(*args):
+    TextBox.insert("1.0", "# ")
+# Add binding root.bind("<Control-Key-/>", ToggleLineComment)
+
+
+
+def ToggleBlockComment(*args):
+    TextBox.insert("1.0", "''' \n\n'''")
+root.bind("<Control-Shift-A>", ToggleBlockComment)
+
+
+# Tools Menu Options
 
 
 
 # Word Count Function
-# Character Count and word count in the status bar
-def WordCount():
-    pass
+def DeclareWordCount():
+    # Get data in textbox - turns into a string
+    TextContent = TextBox.get("1.0", END)
+    # String to number
+    CharactersInTextBox = len(TextContent)
+    # Config in Status Bar    
+    WordsInTextBox = len(TextContent.split()) 
+    StatusBar.config(text="Code Knight - Characters: " + str(CharactersInTextBox-1) + " Words: " + str(WordsInTextBox))
+
+def InitWordCount():
+    DeclareWordCount()
+    StatusBar.after(1, InitWordCount)
 
 
 
@@ -246,6 +290,21 @@ root.bind("<Alt-Key-z>", ToggleWordWrap)
 
 
 
+def Text_to_Speech():
+    pass
+    # Works as a reader, reads all files and txt and pdf files for stories etc...
+
+
+
+def Speech_to_Text():
+    pass
+    # Take the spoken words and convert them into text
+    # Maybe add settings for speech to text in settings section:
+    # Settings can contain things like turn the word "enter" to text or command - go to line command for future versions
+    # Initialize The Voice Typing - MAYBE add keyboard shorucut 
+
+
+
 # Template Manager Function
 def TemplateManagerFunction(*args):
     TemplateManager = Toplevel(root)
@@ -255,11 +314,17 @@ def TemplateManagerFunction(*args):
     # HTML Templates
     def HTML_Basic_MarkupFunction(*args):
         HTML_Basic_Markup = "<!DOCTYPE html> \n<html lang=\"en\"> \n<head> \n\t<meta charset=\"UTF-8\"> \n\t<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"> \n\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"> \n\t<title>Untitled</title> \n</head> \n<body> \n\n</body> \n</html>"
+        global OpenFileStatusName
+        OpenFileStatusName = False
+        # Create a New Tab when new file function occurs
         TextBox.delete("1.0", END)
         TextBox.insert("1.0", HTML_Basic_Markup)
     
     def HTML_LoginForm_Function(*args):
         HTML_LoginForm = "<!DOCTYPE html> \n<html lang=\"en\"> \n<head> \n\t<meta charset=\"UTF-8\"> \n\t<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"> \n\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"> \n\t<title>Untitled</title> \n</head> \n<body> \n\t<form> \n\t\t<div> \n\t\t\t<label>Username</label> \n\t\t\t<input> \n\t\t</div> \n\n\t\t<div> \n\n\t\t\t<label>Password</label> \n\t\t\t<input> \n\t\t</div> \n\n\t\t<button>Submit</button> \n\t</form> \n</body> \n</html>"
+        global OpenFileStatusName
+        OpenFileStatusName = False
+        # Create a New Tab when new file function occurs
         TextBox.delete("1.0", END)
         TextBox.insert("1.0", HTML_LoginForm)
 
@@ -276,6 +341,9 @@ def TemplateManagerFunction(*args):
     #Python Templates
     def Tkinter_SetupFunction():
         Tkinter_Setup = "from tkinter import * \n\nroot = Tk() \nroot.geometry(\"300x300\") \nroot.title(\"Untitled\") \n\nroot.mainloop()"
+        global OpenFileStatusName
+        OpenFileStatusName = False
+        # Create a New Tab when new file function occurs
         TextBox.delete("1.0", END)
         TextBox.insert("1.0", Tkinter_Setup)
     
@@ -287,21 +355,6 @@ def TemplateManagerFunction(*args):
     Tkinter_SetupBtn.pack()
 
     TemplateManager.mainloop()
-
-
-
-def Text_to_Speech():
-    pass
-    # Works as a reader, reads all files and txt and pdf files for stories etc...
-
-
-
-def Speech_to_Text():
-    pass
-    # Take the spoken words and convert them into text
-    # Maybe add settings for speech to text in settings section:
-    # Settings can contain things like turn the word "enter" to text or command - go to line command for future versions
-    # Initialize The Voice Typing - MAYBE add keyboard shorucut 
 
 
 
@@ -338,7 +391,7 @@ def AboutScreen():
 
 # Add stuff like word count, character count, what the location of the mouse is like for eg: Ln 22, Col 2
 # Status Bar
-StatusBar = Label(root, text="Code Editor", anchor=W)
+StatusBar = Label(root, text="Code Knight", anchor=W)
 StatusBar.config(bg="dodgerblue")
 StatusBar.pack(fill=X, side=BOTTOM, ipady=2)
 
@@ -363,7 +416,7 @@ HorizontalScrollbar.pack(side=BOTTOM, fill=X)
 
 
 # Text Box               Change width to fit other stuff in future versions
-TextBox = Text(MainFrame, width=500, font=("Monaco", 16), selectbackground="skyblue", undo=True, wrap="none", yscrollcommand=VerticalScrollbar.set, xscrollcommand=HorizontalScrollbar.set)
+TextBox = Text(MainFrame, width=500, font=("Courier New", 16), selectbackground="skyblue", undo=True, wrap="none", yscrollcommand=VerticalScrollbar.set, xscrollcommand=HorizontalScrollbar.set)
 TextBox.pack(fill=BOTH)
 
 
@@ -389,8 +442,6 @@ MenuBar.config(bg="White", fg="Black", activebackground="Whitesmoke", activefore
 AutoSave_CheckMark = BooleanVar()
 AutoSave_CheckMark.set(False)
 
-
-
 # File Menu for Menu Bar
 FileOption = Menu(MenuBar, tearoff=False)
 MenuBar.add_cascade(label="File", menu=FileOption, underline=0)
@@ -406,16 +457,23 @@ FileOption.add_cascade(label="New", menu=NewOption)
 
 # Add the Other File Menu Options
 FileOption.add_command(label="Open File", command=OpenFile, accelerator="Ctrl+O")
-FileOption.add_command(label="Open Folder", command=None, accelerator="Ctrl+Shift+O")
+
+'''
+
+CREATE THIS PART IN FUTURE VERSIONS, ADD A OPEN RECENT OPTION, OPEN FOLDER OPTION,
+#FileOption.add_command(label="Open Folder", command=None, accelerator="Ctrl+Shift+O")
 
 # Drop Down for Open Recent Option on File Menu
-OpenRecentOption = Menu(FileOption, tearoff=False)
-OpenRecentOption.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
+#OpenRecentOption = Menu(FileOption, tearoff=False)
+#OpenRecentOption.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
 # Cascade the Open Recent Option to the File Menu
-FileOption.add_cascade(label="Open Recent", menu=OpenRecentOption) 
+#FileOption.add_cascade(label="Open Recent", menu=OpenRecentOption) 
 
 # Add the Other File Menu Options
-FileOption.add_separator()
+#FileOption.add_separator()
+
+'''
+
 FileOption.add_command(label="Save File", command=SaveFile, accelerator="Ctrl+S")
 FileOption.add_command(label="Save As", command=SaveFileAs, accelerator="Ctrl+Shift+S")
 FileOption.add_separator()
@@ -430,7 +488,7 @@ FileOption.add_cascade(label="Preferences", menu=PreferencesMenu)
 
 # The Remaining options for the File Menu
 FileOption.add_separator()
-FileOption.add_command(label="Close Editor", command=None)
+FileOption.add_command(label="Close Editor", command=CloseEditor)
 FileOption.add_command(label="Exit", command=ExitProgram, accelerator="Ctrl+Q")
 
 
@@ -446,11 +504,11 @@ EditOption.add_command(label="Cut", command=lambda: CutText(False), accelerator=
 EditOption.add_command(label="Copy", command=lambda: CopyText(False), accelerator="Ctrl+C")
 EditOption.add_command(label="Paste", command=lambda: PasteText(False), accelerator="Ctrl+V")
 EditOption.add_separator()
-EditOption.add_command(label="Find & Replace", command=None, accelerator="Ctrl+F")
-EditOption.add_command(label="Select All", command=lambda: SelectAll(True), accelerator="Ctrl+A")
+EditOption.add_command(label="Toggle Line Comment", command=ToggleLineComment, accelerator="Ctrl+/")
+EditOption.add_command(label="Toggle Block Comment", command=ToggleBlockComment, accelerator="Ctrl+Shift-A")
 EditOption.add_separator()
-EditOption.add_command(label="Toggle Line Comment", command=None, accelerator="Ctrl+/")
-EditOption.add_command(label="Toggle Block Comment", command=None, accelerator="Ctrl+Shift-A")
+#EditOption.add_command(label="Find & Replace", command=FindAndReplace, accelerator="Ctrl+H")
+EditOption.add_command(label="Select All", command=lambda: SelectAll(True), accelerator="Ctrl+A")
 
 
 
@@ -468,9 +526,9 @@ ViewOption.config(bg="White", fg="Black", activebackground="Whitesmoke", activef
 # Add command for the options below
 ViewOption.add_checkbutton(label="Show Toolbar", onvalue=1, offvalue=0, variable=Toolbar_CheckMark)     
 ViewOption.add_checkbutton(label="Show Status Bar", onvalue=1, offvalue=0, variable=StatusBar_CheckMark)  
-ViewOption.add_separator()
-ViewOption.add_command(label="Zoom In", accelerator="Ctrl++")
-ViewOption.add_command(label="Zoom Out", accelerator="Ctrl+-")
+#ViewOption.add_separator()
+#ViewOption.add_command(label="Zoom In", accelerator="Ctrl++")
+#ViewOption.add_command(label="Zoom Out", accelerator="Ctrl+-")
 
 
 
@@ -478,8 +536,8 @@ ViewOption.add_command(label="Zoom Out", accelerator="Ctrl+-")
 RunOption = Menu(MenuBar, tearoff=False)
 MenuBar.add_cascade(label="Run", menu=RunOption, underline=0)
 RunOption.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
-RunOption.add_command(label="Run Current Script", accelerator="F5")
-RunOption.add_command(label="Debug Current Script", accelerator="Ctrl+F5")
+RunOption.add_command(label="Run Python File", command=RunPythonFile)
+# Add a debugger in future versions
 
 
 
@@ -491,7 +549,7 @@ WordWrap_CheckMark.set(False)
 ToolsOption = Menu(MenuBar, tearoff=False)
 MenuBar.add_cascade(label="Tools", menu=ToolsOption, underline=0)
 ToolsOption.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
-ToolsOption.add_command(label="Word Count")
+ToolsOption.add_command(label="Word Count", command=InitWordCount)
 ToolsOption.add_checkbutton(label="Toggle Word Wrap", onvalue=1, offvalue=0, variable=WordWrap_CheckMark, command=ToggleWordWrap, accelerator="Alt-Z")
 ToolsOption.add_separator()
 ToolsOption.add_command(label="Text to Speech", command=Text_to_Speech)
@@ -522,15 +580,15 @@ HelpMenu.add_command(label="About", command=AboutScreen)
 # Right Click Menu
 RightClickMenu = Menu(TextBox, tearoff=False)
 RightClickMenu.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
-RightClickMenu.add_command(label="Undo", command=TextBox.edit_undo, accelerator="Ctrl+z")
-RightClickMenu.add_command(label="Redo", command=TextBox.edit_redo, accelerator="Ctrl+y")
+RightClickMenu.add_command(label="Undo", command=TextBox.edit_undo, accelerator="Ctrl+Z")
+RightClickMenu.add_command(label="Redo", command=TextBox.edit_redo, accelerator="Ctrl+Y")
 RightClickMenu.add_separator()
-RightClickMenu.add_command(label="Cut", command=lambda: CutText(False), accelerator="Ctrl+x")
-RightClickMenu.add_command(label="Copy", command=lambda: CopyText(False), accelerator="Ctrl+c")
-RightClickMenu.add_command(label="Paste", command=lambda: PasteText(False), accelerator="Ctrl+v")
-RightClickMenu.add_command(label="Select All", command=lambda: SelectAll(True), accelerator="Ctrl+a")
+RightClickMenu.add_command(label="Cut", command=lambda: CutText(False), accelerator="Ctrl+X")
+RightClickMenu.add_command(label="Copy", command=lambda: CopyText(False), accelerator="Ctrl+C")
+RightClickMenu.add_command(label="Paste", command=lambda: PasteText(False), accelerator="Ctrl+V")
+RightClickMenu.add_command(label="Select All", command=lambda: SelectAll(True), accelerator="Ctrl+A")
 RightClickMenu.add_separator()
-RightClickMenu.add_command(label="example", command=None) 
+RightClickMenu.add_command(label="Run Python File", command=RunPythonFile)
 
 # Right Click Menu Popup Function
 def RightClickMenuPopUp(e):
