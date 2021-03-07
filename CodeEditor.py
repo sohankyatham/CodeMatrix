@@ -114,8 +114,41 @@ def AutoSaveInit():
 
 # Keyboard Shortcuts Function
 def ColorTheme():
-    pass
-    # Use Toplevel Window and make selection of all the themes - have an external file which contains the configurations for the User Interface
+    # For Future Versions - place functions in seperate file called CodeEditorThemes.py
+    # Add commands and place functions in this function
+    ColorThemeWindow = Toplevel(root)
+    ColorThemeWindow.geometry("300x300")
+    ColorThemeWindow.title("Color Theme")
+    
+    # Default Theme
+    def DefaultTheme():
+        TextBox.config(bg="White", fg="Black")
+        MenuBar.config(bg="White", fg="Black")
+        StatusBar.config(bg="dodgerblue")
+
+    DefaultThemeBtn = Button(ColorThemeWindow, text="Default Theme", command=DefaultTheme)
+    DefaultThemeBtn.pack()
+
+    # Light Theme
+    def LightTheme():
+        TextBox.config(bg="Whitesmoke", fg="Black")
+        MenuBar.config(bg="White", fg="Black")
+        StatusBar.config(bg="dodgerblue")
+
+    LightThemeBtn = Button(ColorThemeWindow, text="Light Theme", command=LightTheme)
+    LightThemeBtn.pack()
+
+    # Dark Theme
+    def DarkTheme():
+        TextBox.config(bg="#332a2a", fg="White")
+        MenuBar.config(bg="Black", fg="White")
+        StatusBar.config(bg="dodgerblue")
+
+    DarkThemeBtn = Button(ColorThemeWindow, text="Dark Theme", command=DarkTheme)
+    DarkThemeBtn.pack()
+    
+    # Main Loop for Color Theme
+    ColorThemeWindow.mainloop()
 
 
 
@@ -202,32 +235,58 @@ def ToggleWordWrap(*args):
     # If there is no word wrap then add word wrap
     if TextBox.cget("wrap") == "none":
         TextBox.configure(wrap="word")
+        # Turn on Check Mark if the Function is called 
         WordWrap_CheckMark.set(True)
-
     # If there is word wrap then take out word wrap
     elif TextBox.cget("wrap") == "word":
         TextBox.configure(wrap="none")
+        # Turn off Check Mark if the Function is disabled
         WordWrap_CheckMark.set(False)
 root.bind("<Alt-Key-z>", ToggleWordWrap)
 
 
 
 # Template Manager Function
-def TemplateManagerFunction():
-    TemplateManager = Toplevel(width="500", height="500")
-    # Make sections of each supported language 
-    # Then show templates applicable in each language
-    # Then Let the user selct a template
-    # Then write in the textbox the template code
+def TemplateManagerFunction(*args):
+    TemplateManager = Toplevel(root)
+    TemplateManager.geometry("500x500")
+    TemplateManager.title("Template Manager")
+
+    # HTML Templates
+    def HTML_Basic_MarkupFunction(*args):
+        HTML_Basic_Markup = "<!DOCTYPE html> \n<html lang=\"en\"> \n<head> \n\t<meta charset=\"UTF-8\"> \n\t<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"> \n\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"> \n\t<title>Untitled</title> \n</head> \n<body> \n\n</body> \n</html>"
+        TextBox.delete("1.0", END)
+        TextBox.insert("1.0", HTML_Basic_Markup)
+    
+    def HTML_LoginForm_Function(*args):
+        HTML_LoginForm = "<!DOCTYPE html> \n<html lang=\"en\"> \n<head> \n\t<meta charset=\"UTF-8\"> \n\t<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"> \n\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"> \n\t<title>Untitled</title> \n</head> \n<body> \n\t<form> \n\t\t<div> \n\t\t\t<label>Username</label> \n\t\t\t<input> \n\t\t</div> \n\n\t\t<div> \n\n\t\t\t<label>Password</label> \n\t\t\t<input> \n\t\t</div> \n\n\t\t<button>Submit</button> \n\t</form> \n</body> \n</html>"
+        TextBox.delete("1.0", END)
+        TextBox.insert("1.0", HTML_LoginForm)
+
+    # Buttons for HTML Templates
+    HTML_HeaderText = Label(TemplateManager, text="HTML", fg="Black", font=("Helvetica", 16))
+    HTML_HeaderText.pack()
+
+    HTML_StartFile = Button(TemplateManager, text="Basic Markup", bg="Royalblue", fg="White", command=HTML_Basic_MarkupFunction)
+    HTML_StartFile.pack()
+
+    HTML_LoginFormBtn = Button(TemplateManager, text="Login Form", bg="Royalblue", fg="White", command=HTML_LoginForm_Function)
+    HTML_LoginFormBtn.pack(pady=5)
+
+    #Python Templates
+    def Tkinter_SetupFunction():
+        Tkinter_Setup = "from tkinter import * \n\nroot = Tk() \nroot.geometry(\"300x300\") \nroot.title(\"Untitled\") \n\nroot.mainloop()"
+        TextBox.delete("1.0", END)
+        TextBox.insert("1.0", Tkinter_Setup)
+    
+    # Buttons for Python Templates
+    Python_HeaderText = Label(TemplateManager, text="Python", fg="Black", font=("Helvetica", 16))
+    Python_HeaderText.pack(pady=10)
+    
+    Tkinter_SetupBtn = Button(TemplateManager, text="Tkinter Starting Code", bg="Royalblue", fg="White", command=Tkinter_SetupFunction)
+    Tkinter_SetupBtn.pack()
+
     TemplateManager.mainloop()
-
-
-
-# Save the Current File as a Template Function
-def SaveFileAsTemplate():
-    pass
-    # Grab the content of the opened file
-    # Save the collected content in the Template Manager
 
 
 
@@ -246,6 +305,30 @@ def Speech_to_Text():
 
 
 
+# Help Menu Functions
+
+
+
+# About Screen Function
+def AboutScreen():
+    AboutScreenPopUp = Toplevel(root)
+    AboutScreenPopUp.title("About")
+    AboutScreenPopUp.geometry("300x300")
+
+    AboutHeader = Label(AboutScreenPopUp, text="Code Knight", font=("Helvetica", 16))
+    AboutHeader.pack()
+
+    AboutHeaderAttribtion = Label(AboutScreenPopUp, text="By: Sohan Kyatham", font=("Helvetica", 12))
+    AboutHeaderAttribtion.pack(pady=5)
+
+    AboutVersion = Label(AboutScreenPopUp, text="Version: 1.0.0", font=("Helvetica", 12))
+    AboutVersion.pack(pady=60)
+
+    AboutScreenPopUp.mainloop()
+
+
+
+
 # For future versions - add tabs so users can work with multiple files at once
 # Tab Control --- place for adding new tab
 # TabControl = ttk.Notebook(root)
@@ -255,7 +338,8 @@ def Speech_to_Text():
 
 # Add stuff like word count, character count, what the location of the mouse is like for eg: Ln 22, Col 2
 # Status Bar
-StatusBar = Label(root, text="Code Editor", bg="dodgerblue", anchor=W)
+StatusBar = Label(root, text="Code Editor", anchor=W)
+StatusBar.config(bg="dodgerblue")
 StatusBar.pack(fill=X, side=BOTTOM, ipady=2)
 
 
@@ -278,7 +362,7 @@ HorizontalScrollbar.pack(side=BOTTOM, fill=X)
 
 
 
-# Text Box               Change width to fit rest
+# Text Box               Change width to fit other stuff in future versions
 TextBox = Text(MainFrame, width=500, font=("Monaco", 16), selectbackground="skyblue", undo=True, wrap="none", yscrollcommand=VerticalScrollbar.set, xscrollcommand=HorizontalScrollbar.set)
 TextBox.pack(fill=BOTH)
 
@@ -316,7 +400,7 @@ FileOption.config(bg="White", fg="Black", activebackground="Whitesmoke", activef
 NewOption = Menu(FileOption, tearoff=False)
 NewOption.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
 NewOption.add_command(label="Empty File", command=EmptyFile, accelerator="Ctrl+N")
-NewOption.add_command(label="From Template", command=None) # Open Template Manager and select template
+NewOption.add_command(label="From Template", command=TemplateManagerFunction)
 # Cascade the New menu to the File Menu
 FileOption.add_cascade(label="New", menu=NewOption)
 
@@ -340,7 +424,7 @@ FileOption.add_checkbutton(label="Auto Save", onvalue=1, offvalue=0, variable=Au
 # Preferences Drop Down Option for File Menu             
 PreferencesMenu = Menu(FileOption, tearoff=False)
 PreferencesMenu.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
-PreferencesMenu.add_command(label="Color Theme", command=None)
+PreferencesMenu.add_command(label="Color Theme", command=ColorTheme)
 # Cascade the Preferences menu to the File Menu
 FileOption.add_cascade(label="Preferences", menu=PreferencesMenu)
 
@@ -410,14 +494,10 @@ ToolsOption.config(bg="White", fg="Black", activebackground="Whitesmoke", active
 ToolsOption.add_command(label="Word Count")
 ToolsOption.add_checkbutton(label="Toggle Word Wrap", onvalue=1, offvalue=0, variable=WordWrap_CheckMark, command=ToggleWordWrap, accelerator="Alt-Z")
 ToolsOption.add_separator()
-ToolsOption.add_command(label="Template Manager", command=TemplateManagerFunction)
-ToolsOption.add_command(label="Save File as Template")
-ToolsOption.add_separator()
 ToolsOption.add_command(label="Text to Speech", command=Text_to_Speech)
 ToolsOption.add_command(label="Speech to Text", command=Speech_to_Text)
 ToolsOption.add_separator()
-ToolsOption.add_command(label="Notes")
-ToolsOption.add_command(label="Color Chooser")
+ToolsOption.add_command(label="Template Manager", command=TemplateManagerFunction)
 
 
 
@@ -434,7 +514,7 @@ HelpMenu.add_command(label="Report Issue")
 HelpMenu.add_command(label="View License")
 HelpMenu.add_separator()
 HelpMenu.add_command(label="Settings", command=None)    # Create new window that has the settings options; For future versions create a tab in the IDE for the settings option
-HelpMenu.add_command(label="About", command=None)
+HelpMenu.add_command(label="About", command=AboutScreen)
 
 
 
