@@ -3,6 +3,7 @@ from tkinter import *
 from tkinter import filedialog
 from tkinter import font
 from tkinter import ttk
+import speech_recognition as sr
  
 
 
@@ -41,17 +42,20 @@ root.bind('<Control-n>', EmptyFile)
 # Open File Function
 def OpenFile(*args):
     # Ask user for which file they want to open
-    FilePath = filedialog.askopenfilename(initialdir="C:/gui/", title="Open a File", filetypes=(
-    ("All Files", "*.*"), ("Text Files", "*.txt"), ("HTML Files", "*.html"), ("CSS Files", "*.css"),("JavaScript Files", "*.js"), ("Python Files", "*.py")))
+    FilePath = filedialog.askopenfilename(initialdir="C:/gui/", title="Open a File", filetypes=(("All Files", "*.*"), ("Text Files", "*.txt"), ("HTML Files", "*.html"), ("CSS Files", "*.css"),("JavaScript Files", "*.js"), ("Python Files", "*.py")))
+    
     # Check to see if there is a file opened, then find the name and status of the file and use it in code for other things like saving a file and accessing it later
     if FilePath:
         global OpenFileStatusName
         OpenFileStatusName = FilePath
+    
     # Set a name for the File Path
     FileName = FilePath
+    
     # Configure the title and Replace the directory with the file name
     FileName = FileName.replace("C:/gui/", "")
     TextBox.delete("1.0", END)
+    
     # Open File and Insert File Content into Editor
     FilePath = open(FilePath, 'r')
     FileContent = FilePath.read()
@@ -64,12 +68,14 @@ root.bind('<Control-o>', OpenFile)
 # Save File Function
 def SaveFile(*args):
     global OpenFileStatusName
+
     # If File has been opened then save
     if OpenFileStatusName:
         FilePath = open(OpenFileStatusName, "w")
         FilePath.write(TextBox.get(1.0, END))
         FilePath.close()
-        # Add a asterisk (*) when file isnt saved - and when file is saved then remove asterisk - NO ASTERISK FOR AUTOSAVE - DISABLE ASTERISK WHEN AUTOSAVE FEATURE IS RAN
+
+    # Add a asterisk (*) when file isnt saved - and when file is saved then remove asterisk - NO ASTERISK FOR AUTOSAVE - DISABLE ASTERISK WHEN AUTOSAVE FEATURE IS RAN
     # If the file does not exist, then save this file as a file
     else:
         SaveFileAs()
@@ -122,7 +128,7 @@ def ColorTheme():
     
     # Default Theme
     def DefaultTheme():
-        TextBox.config(bg="White", fg="White")
+        TextBox.config(bg="White", fg="Black")
         MenuBar.config(bg="White", fg="Black")
         StatusBar.config(bg="dodgerblue")
 
@@ -254,6 +260,7 @@ def ToggleBlockComment(*args):
 root.bind("<Control-Shift-A>", ToggleBlockComment)
 
 
+
 # Tools Menu Options
 
 
@@ -262,10 +269,10 @@ root.bind("<Control-Shift-A>", ToggleBlockComment)
 def DeclareWordCount():
     # Get data in textbox - turns into a string
     TextContent = TextBox.get("1.0", END)
-    # String to number
-    CharactersInTextBox = len(TextContent)
-    # Config in Status Bar    
+    # String to number 
+    CharactersInTextBox = len(TextContent)    
     WordsInTextBox = len(TextContent.split()) 
+    # Config in Status Bar
     StatusBar.config(text="Code Knight - Characters: " + str(CharactersInTextBox-1) + " Words: " + str(WordsInTextBox))
 
 def InitWordCount():
@@ -276,11 +283,13 @@ def InitWordCount():
 
 # Toggle Word Wrap Function
 def ToggleWordWrap(*args):
+
     # If there is no word wrap then add word wrap
     if TextBox.cget("wrap") == "none":
         TextBox.configure(wrap="word")
         # Turn on Check Mark if the Function is called 
         WordWrap_CheckMark.set(True)
+
     # If there is word wrap then take out word wrap
     elif TextBox.cget("wrap") == "word":
         TextBox.configure(wrap="none")
@@ -290,18 +299,38 @@ root.bind("<Alt-Key-z>", ToggleWordWrap)
 
 
 
-def Text_to_Speech():
-    pass
-    # Works as a reader, reads all files and txt and pdf files for stories etc...
-
-
-
+# Speech to Text Function
 def Speech_to_Text():
-    pass
-    # Take the spoken words and convert them into text
-    # Maybe add settings for speech to text in settings section:
-    # Settings can contain things like turn the word "enter" to text or command - go to line command for future versions
-    # Initialize The Voice Typing - MAYBE add keyboard shorucut 
+    mic_list = sr.Microphone.list_microphone_names()
+    print('here........')
+    print(mic_list)
+    mic_name='Intel 82801AA-ICH: MIC ADC (hw:0,1)'
+    for i, microphone_name in enumerate(mic_list): 
+        if microphone_name == mic_name: 
+            device_id = i 
+    print(device_id)
+
+    # Values that are recording for processing
+    sample_rate = 48000
+
+    # Bytes of Data that we want to read at once 
+    chunk_size = 5000
+    r = sr.Recognizer() 
+    with sr.Microphone(device_index = device_id, sample_rate = sample_rate,chunk_size = chunk_size) as source:
+        r.adjust_for_ambient_noise(source) 
+        print("Recording...")
+        #listens for the user's input 
+        audio = r.listen(source)
+        try: 
+            text = r.recognize_google(audio)
+            # Insert content into text box
+            TextBox.insert(1.0, text)
+
+        #error occurs when google could not understand what was said 
+
+        except sr.UnknownValueError: 
+            print("Google Speech Recognition could not understand audio - TRY AGAIN") 
+            Speech_to_Text()
 
 
 
@@ -364,19 +393,24 @@ def TemplateManagerFunction(*args):
 
 # About Screen Function
 def AboutScreen():
+    # About Screen Window
     AboutScreenPopUp = Toplevel(root)
     AboutScreenPopUp.title("About")
     AboutScreenPopUp.geometry("300x300")
 
+    # Header
     AboutHeader = Label(AboutScreenPopUp, text="Code Knight", font=("Helvetica", 16))
     AboutHeader.pack()
 
+    # Attribution
     AboutHeaderAttribtion = Label(AboutScreenPopUp, text="By: Sohan Kyatham", font=("Helvetica", 12))
     AboutHeaderAttribtion.pack(pady=5)
 
+    # Version
     AboutVersion = Label(AboutScreenPopUp, text="Version: 1.0.0", font=("Helvetica", 12))
     AboutVersion.pack(pady=60)
 
+    # Mainloop
     AboutScreenPopUp.mainloop()
 
 
@@ -457,23 +491,6 @@ FileOption.add_cascade(label="New", menu=NewOption)
 
 # Add the Other File Menu Options
 FileOption.add_command(label="Open File", command=OpenFile, accelerator="Ctrl+O")
-
-'''
-
-CREATE THIS PART IN FUTURE VERSIONS, ADD A OPEN RECENT OPTION, OPEN FOLDER OPTION,
-#FileOption.add_command(label="Open Folder", command=None, accelerator="Ctrl+Shift+O")
-
-# Drop Down for Open Recent Option on File Menu
-#OpenRecentOption = Menu(FileOption, tearoff=False)
-#OpenRecentOption.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
-# Cascade the Open Recent Option to the File Menu
-#FileOption.add_cascade(label="Open Recent", menu=OpenRecentOption) 
-
-# Add the Other File Menu Options
-#FileOption.add_separator()
-
-'''
-
 FileOption.add_command(label="Save File", command=SaveFile, accelerator="Ctrl+S")
 FileOption.add_command(label="Save As", command=SaveFileAs, accelerator="Ctrl+Shift+S")
 FileOption.add_separator()
@@ -504,10 +521,9 @@ EditOption.add_command(label="Cut", command=lambda: CutText(False), accelerator=
 EditOption.add_command(label="Copy", command=lambda: CopyText(False), accelerator="Ctrl+C")
 EditOption.add_command(label="Paste", command=lambda: PasteText(False), accelerator="Ctrl+V")
 EditOption.add_separator()
-EditOption.add_command(label="Toggle Line Comment", command=ToggleLineComment, accelerator="Ctrl+/")
+EditOption.add_command(label="Toggle Line Comment", command=ToggleLineComment)
 EditOption.add_command(label="Toggle Block Comment", command=ToggleBlockComment, accelerator="Ctrl+Shift-A")
 EditOption.add_separator()
-#EditOption.add_command(label="Find & Replace", command=FindAndReplace, accelerator="Ctrl+H")
 EditOption.add_command(label="Select All", command=lambda: SelectAll(True), accelerator="Ctrl+A")
 
 
@@ -552,9 +568,7 @@ ToolsOption.config(bg="White", fg="Black", activebackground="Whitesmoke", active
 ToolsOption.add_command(label="Word Count", command=InitWordCount)
 ToolsOption.add_checkbutton(label="Toggle Word Wrap", onvalue=1, offvalue=0, variable=WordWrap_CheckMark, command=ToggleWordWrap, accelerator="Alt-Z")
 ToolsOption.add_separator()
-ToolsOption.add_command(label="Text to Speech", command=Text_to_Speech)
 ToolsOption.add_command(label="Speech to Text", command=Speech_to_Text)
-ToolsOption.add_separator()
 ToolsOption.add_command(label="Template Manager", command=TemplateManagerFunction)
 
 
