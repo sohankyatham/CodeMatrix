@@ -267,7 +267,7 @@ root.bind("<Control-Shift-A>", ToggleBlockComment)
 # Word Count Function
 def DeclareWordCount():
 
-    # Turn of Word Wrap if the User Unchecks the Option in the Tools Menu
+    # Turn of Word Count if the User Unchecks the Option in the Tools Menu
 
     # Get data in textbox - turns into a string
     TextContent = TextBox.get("1.0", END)
