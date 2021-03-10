@@ -51,7 +51,7 @@ def OpenFile(*args):
     # Set a name for the File Path
     FileName = FilePath
     
-    # Configure the title and Replace the directory with the file name
+    # Configure the title and Replace the directory with the file name # CHANGE TO FILEPATH AND TEST
     FileName = FileName.replace("C:/gui/", "")
     TextBox.delete("1.0", END)
     
@@ -299,10 +299,10 @@ root.bind("<Alt-Key-z>", ToggleWordWrap)
 
 
 # Template Manager Function
-def TemplateManagerFunction(*args):
-    TemplateManager = Toplevel(root)
-    TemplateManager.geometry("500x500")
-    TemplateManager.title("Template Manager")
+def TemplateManager(*args):
+    TemplateManagerWindow = Toplevel(root)
+    TemplateManagerWindow.geometry("500x500")
+    TemplateManagerWindow.title("Template Manager")
 
     # HTML Templates
     def HTML_Basic_MarkupFunction(*args):
@@ -311,6 +311,7 @@ def TemplateManagerFunction(*args):
         OpenFileStatusName = False
         # Create a New Tab when new file function occurs
         TextBox.delete("1.0", END)
+        # Insert the Template
         TextBox.insert("1.0", HTML_Basic_Markup)
     
     def HTML_LoginForm_Function(*args):
@@ -319,16 +320,17 @@ def TemplateManagerFunction(*args):
         OpenFileStatusName = False
         # Create a New Tab when new file function occurs
         TextBox.delete("1.0", END)
+        # Insert the Template
         TextBox.insert("1.0", HTML_LoginForm)
 
-    HTML_HeaderText = Label(TemplateManager, text="HTML", fg="Black", font=("Helvetica", 16))
+    HTML_HeaderText = Label(TemplateManagerWindow, text="HTML", fg="Black", font=("Helvetica", 16))
     HTML_HeaderText.pack()
 
     # Buttons for HTML Templates
-    HTML_StartFile = Button(TemplateManager, text="Basic Markup", bg="Royalblue", fg="White", command=HTML_Basic_MarkupFunction)
+    HTML_StartFile = Button(TemplateManagerWindow, text="Basic Markup", bg="Royalblue", fg="White", command=HTML_Basic_MarkupFunction)
     HTML_StartFile.pack()
 
-    HTML_LoginFormBtn = Button(TemplateManager, text="Login Form", bg="Royalblue", fg="White", command=HTML_LoginForm_Function)
+    HTML_LoginFormBtn = Button(TemplateManagerWindow, text="Login Form", bg="Royalblue", fg="White", command=HTML_LoginForm_Function)
     HTML_LoginFormBtn.pack(pady=5)
 
     #Python Templates
@@ -338,13 +340,14 @@ def TemplateManagerFunction(*args):
         OpenFileStatusName = False
         # Create a New Tab when new file function occurs
         TextBox.delete("1.0", END)
+        # Insert the Template
         TextBox.insert("1.0", Tkinter_Setup)
     
-    Python_HeaderText = Label(TemplateManager, text="Python", fg="Black", font=("Helvetica", 16))
+    Python_HeaderText = Label(TemplateManagerWindow, text="Python", fg="Black", font=("Helvetica", 16))
     Python_HeaderText.pack(pady=10)
     
     # Buttons for Python Templates
-    Tkinter_SetupBtn = Button(TemplateManager, text="Tkinter Starting Code", bg="Royalblue", fg="White", command=Tkinter_SetupFunction)
+    Tkinter_SetupBtn = Button(TemplateManagerWindow, text="Tkinter Starting Code", bg="Royalblue", fg="White", command=Tkinter_SetupFunction)
     Tkinter_SetupBtn.pack()
 
     # Java Templates
@@ -354,16 +357,17 @@ def TemplateManagerFunction(*args):
         OpenFileStatusName = False  
         # Create a New Tab when new file function occurs
         TextBox.delete("1.0", END)
+        # Insert the Template
         TextBox.insert("1.0", JAVA_StartFile)
     
-    Java_HeaderText = Label(TemplateManager, text="Java", fg="Black", font=("Helvetica", 16))
+    Java_HeaderText = Label(TemplateManagerWindow, text="Java", fg="Black", font=("Helvetica", 16))
     Java_HeaderText.pack(pady=10)
 
     # Buttons for Java Template
-    JAVA_StartFileBtn = Button(TemplateManager, text="Staring Code", bg="Royalblue", fg="White", command=JAVA_StartFileFunction)
+    JAVA_StartFileBtn = Button(TemplateManagerWindow, text="Staring Code", bg="Royalblue", fg="White", command=JAVA_StartFileFunction)
     JAVA_StartFileBtn.pack()
 
-    TemplateManager.mainloop()
+    TemplateManagerWindow.mainloop()
 
 
 
@@ -371,7 +375,7 @@ def TemplateManagerFunction(*args):
 
 
 
-# About Screen Function
+# About Screen Function - MAYBE - PLACE IN A NEW FILE
 def AboutScreen():
     # About Screen Window
     AboutScreenPopUp = Toplevel(root)
@@ -379,16 +383,20 @@ def AboutScreen():
     AboutScreenPopUp.geometry("300x300")
 
     # Header
-    AboutHeader = Label(AboutScreenPopUp, text="Code Knight", font=("Helvetica", 16))
-    AboutHeader.pack()
+    AboutHeader = Label(AboutScreenPopUp, text="Code Knight", font=("Helvetica", 30))
+    AboutHeader.pack(pady=25)
 
     # Attribution
     AboutHeaderAttribtion = Label(AboutScreenPopUp, text="By: Sohan Kyatham", font=("Helvetica", 12))
-    AboutHeaderAttribtion.pack(pady=5)
+    AboutHeaderAttribtion.pack()
 
     # Version
     AboutVersion = Label(AboutScreenPopUp, text="Version: 1.0.0", font=("Helvetica", 12))
-    AboutVersion.pack(pady=60)
+    AboutVersion.pack()
+
+    # Operating System Version
+    AboutOS = Label(AboutScreenPopUp, text="OS: Linux", font=("Helvetica", 12))
+    AboutOS.pack()
 
     # Mainloop
     AboutScreenPopUp.mainloop()
@@ -455,63 +463,61 @@ MenuBar.config(bg="White", fg="Black", activebackground="Whitesmoke", activefore
 AutoSave_CheckMark = BooleanVar()
 AutoSave_CheckMark.set(False)
 
-# File Menu for Menu Bar
-FileOption = Menu(MenuBar, tearoff=False)
-MenuBar.add_cascade(label="File", menu=FileOption, underline=0)
-FileOption.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
 
-# New Drop Down Option for File Menu             
-NewOption = Menu(FileOption, tearoff=False)
-NewOption.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
-NewOption.add_command(label="Empty File", command=EmptyFile, accelerator="Ctrl+N")
-NewOption.add_command(label="From Template", command=TemplateManagerFunction)
-# Cascade the New menu to the File Menu
-FileOption.add_cascade(label="New", menu=NewOption)
+
+# File Menu for Menu Bar
+FileMenu = Menu(MenuBar, tearoff=False)
+MenuBar.add_cascade(label="File", menu=FileMenu, underline=0)
+FileMenu.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
+
+# New Menu - Drop Down with Options for File Menu             
+NewMenu = Menu(FileMenu, tearoff=False)
+NewMenu.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
+NewMenu.add_command(label="Empty File", command=EmptyFile, accelerator="Ctrl+N")
+NewMenu.add_command(label="From Template", command=TemplateManager)
+# Cascade the New Menu to the File Menu
+FileMenu.add_cascade(label="New", menu=NewMenu)
 
 # Add the Other File Menu Options
-FileOption.add_command(label="Open File", command=OpenFile, accelerator="Ctrl+O")
-# Make Drop Down Save - Save File Ctrl+S| Save File as Template
+FileMenu.add_command(label="Open File", command=OpenFile, accelerator="Ctrl+O") # Add Open Folder & Open Recent
+FileMenu.add_separator()
+FileMenu.add_command(label="Save", command=SaveFile, accelerator='Ctrl+S')
+FileMenu.add_command(label="Save As", command=SaveFileAs, accelerator="Ctrl+Shift+S")
+FileMenu.add_command(label="Save File as Template", command=None)
+FileMenu.add_separator()
+FileMenu.add_checkbutton(label="Auto Save", onvalue=1, offvalue=0, variable=AutoSave_CheckMark, command=AutoSaveInit)
 
-# Save Drop Down Option for File Menu
-SaveOption = Menu(FileOption, tearoff=False)
-SaveOption.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
-SaveOption.add_command(label="Save File", command=SaveFile, accelerator="Ctrl+S")
-SaveOption.add_command(label="Save File as Template", command=None)
-
-# Cascade the Other File Menu Options
-FileOption.add_command(label="Save As", command=SaveFileAs, accelerator="Ctrl+Shift+S")
-FileOption.add_separator()
-FileOption.add_checkbutton(label="Auto Save", onvalue=1, offvalue=0, variable=AutoSave_CheckMark, command=AutoSaveInit)
-
-# Preferences Drop Down Option for File Menu             
-PreferencesMenu = Menu(FileOption, tearoff=False)
+# Preferences Menu - Drop Down with Options for File Menu             
+PreferencesMenu = Menu(FileMenu, tearoff=False)
 PreferencesMenu.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
 PreferencesMenu.add_command(label="Color Theme", command=ColorTheme)
-# Cascade the Preferences menu to the File Menu
-FileOption.add_cascade(label="Preferences", menu=PreferencesMenu)
+PreferencesMenu.add_command(label="Keyboard Shortcuts", command=None)
+PreferencesMenu.add_command(label="Template Manager", command=TemplateManager)
+# Cascade the Preferences Menu to the File Menu
+FileMenu.add_cascade(label="Preferences", menu=PreferencesMenu)
+FileMenu.add_separator()
 
-# The Remaining options for the File Menu
-FileOption.add_separator()
-FileOption.add_command(label="Close Editor", command=CloseEditor)
-FileOption.add_command(label="Exit", command=ExitProgram, accelerator="Ctrl+Q")
+# Add the Other File Menu Options
+FileMenu.add_command(label="Close Editor", command=CloseEditor)
+FileMenu.add_command(label="Exit", command=ExitProgram, accelerator="Ctrl+Q")
 
 
 
-# Edit Option for Menu Bar
-EditOption = Menu(MenuBar, tearoff=False)
-MenuBar.add_cascade(label="Edit", menu=EditOption, underline=0)
-EditOption.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
-EditOption.add_command(label="Undo", command=TextBox.edit_undo, accelerator="Ctrl+Z")
-EditOption.add_command(label="Redo", command=TextBox.edit_redo, accelerator="Ctrl+Y")
-EditOption.add_separator()
-EditOption.add_command(label="Cut", command=lambda: CutText(False), accelerator="Ctrl+X")
-EditOption.add_command(label="Copy", command=lambda: CopyText(False), accelerator="Ctrl+C")
-EditOption.add_command(label="Paste", command=lambda: PasteText(False), accelerator="Ctrl+V")
-EditOption.add_separator()
-EditOption.add_command(label="Toggle Line Comment", command=ToggleLineComment)
-EditOption.add_command(label="Toggle Block Comment", command=ToggleBlockComment, accelerator="Ctrl+Shift-A")
-EditOption.add_separator()
-EditOption.add_command(label="Select All", command=lambda: SelectAll(True), accelerator="Ctrl+A")
+# Edit Menu for Menu Bar
+EditMenu = Menu(MenuBar, tearoff=False)
+MenuBar.add_cascade(label="Edit", menu=EditMenu, underline=0)
+EditMenu.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
+EditMenu.add_command(label="Undo", command=TextBox.edit_undo, accelerator="Ctrl+Z")
+EditMenu.add_command(label="Redo", command=TextBox.edit_redo, accelerator="Ctrl+Y")
+EditMenu.add_separator()
+EditMenu.add_command(label="Cut", command=lambda: CutText(False), accelerator="Ctrl+X")
+EditMenu.add_command(label="Copy", command=lambda: CopyText(False), accelerator="Ctrl+C")
+EditMenu.add_command(label="Paste", command=lambda: PasteText(False), accelerator="Ctrl+V")
+EditMenu.add_separator()
+EditMenu.add_command(label="Toggle Line Comment", command=ToggleLineComment, accelerator="Ctrl+/")
+EditMenu.add_command(label="Toggle Block Comment", command=ToggleBlockComment, accelerator="Ctrl+Shift-A")
+EditMenu.add_separator()
+EditMenu.add_command(label="Select All", command=lambda: SelectAll(True), accelerator="Ctrl+A")
 
 
 
@@ -522,24 +528,26 @@ Toolbar_CheckMark.set(True)
 StatusBar_CheckMark = BooleanVar()
 StatusBar_CheckMark.set(True)
 
-# View Option for Menu Bar
-ViewOption = Menu(MenuBar, tearoff=False)
-MenuBar.add_cascade(label="View", menu=ViewOption, underline=0)
-ViewOption.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
+
+
+# View Menu for Menu Bar
+ViewMenu = Menu(MenuBar, tearoff=False)
+MenuBar.add_cascade(label="View", menu=ViewMenu, underline=0)
+ViewMenu.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
 # Add command for the options below
-ViewOption.add_checkbutton(label="Show Toolbar", onvalue=1, offvalue=0, variable=Toolbar_CheckMark)     
-ViewOption.add_checkbutton(label="Show Status Bar", onvalue=1, offvalue=0, variable=StatusBar_CheckMark)  
-#ViewOption.add_separator()
-#ViewOption.add_command(label="Zoom In", accelerator="Ctrl++")
-#ViewOption.add_command(label="Zoom Out", accelerator="Ctrl+-")
+ViewMenu.add_checkbutton(label="Show Toolbar", onvalue=1, offvalue=0, variable=Toolbar_CheckMark)     
+ViewMenu.add_checkbutton(label="Show Status Bar", onvalue=1, offvalue=0, variable=StatusBar_CheckMark)  
+#ViewMenu.add_separator()
+#ViewMenu.add_command(label="Zoom In", accelerator="Ctrl++")
+#ViewMenu.add_command(label="Zoom Out", accelerator="Ctrl+-")
 
 
 
-# Run Option for Menu Bar
-RunOption = Menu(MenuBar, tearoff=False)
-MenuBar.add_cascade(label="Run", menu=RunOption, underline=0)
-RunOption.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
-RunOption.add_command(label="Run Python File", command=RunPythonFile)
+# Run Menu for Menu Bar
+RunMenu = Menu(MenuBar, tearoff=False)
+MenuBar.add_cascade(label="Run", menu=RunMenu, underline=0)
+RunMenu.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
+RunMenu.add_command(label="Run Python File", command=RunPythonFile)
 # Add a debugger in future versions
 
 
@@ -548,16 +556,18 @@ RunOption.add_command(label="Run Python File", command=RunPythonFile)
 WordWrap_CheckMark = BooleanVar()
 WordWrap_CheckMark.set(False)
 
-# Tools Option for Menu Bar
-ToolsOption = Menu(MenuBar, tearoff=False)
-MenuBar.add_cascade(label="Tools", menu=ToolsOption, underline=0)
-ToolsOption.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
-ToolsOption.add_command(label="Word Count", command=InitWordCount)
-ToolsOption.add_checkbutton(label="Toggle Word Wrap", onvalue=1, offvalue=0, variable=WordWrap_CheckMark, command=ToggleWordWrap, accelerator="Alt-Z")
+
+
+# Tools Menu for Menu Bar
+ToolsMenu = Menu(MenuBar, tearoff=False)
+MenuBar.add_cascade(label="Tools", menu=ToolsMenu, underline=0)
+ToolsMenu.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
+ToolsMenu.add_command(label="Word Count", command=InitWordCount)
+ToolsMenu.add_checkbutton(label="Toggle Word Wrap", onvalue=1, offvalue=0, variable=WordWrap_CheckMark, command=ToggleWordWrap, accelerator="Alt-Z")
 
 
 
-# Help Option for Menu Bar
+# Help Menu for Menu Bar
 HelpMenu = Menu(MenuBar, tearoff=False)
 MenuBar.add_cascade(label="Help", menu=HelpMenu, underline=0)
 HelpMenu.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
