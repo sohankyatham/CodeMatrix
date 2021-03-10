@@ -1,4 +1,4 @@
-# Imports 
+# Imports
 from tkinter import *
 from tkinter import filedialog
 from tkinter import font
@@ -429,7 +429,7 @@ HorizontalScrollbar.pack(side=BOTTOM, fill=X)
 
 
 # Text Box               Change width to fit other stuff in future versions
-TextBox = Text(MainFrame, width=500, font=("Courier New", 16), selectbackground="skyblue", undo=True, wrap="none", yscrollcommand=VerticalScrollbar.set, xscrollcommand=HorizontalScrollbar.set)
+TextBox = Text(MainFrame, width=500, font=("Courier New", 16), selectbackground="Skyblue", undo=True, wrap="none", yscrollcommand=VerticalScrollbar.set, xscrollcommand=HorizontalScrollbar.set)
 TextBox.pack(fill=BOTH)
 
 
@@ -470,7 +470,15 @@ FileOption.add_cascade(label="New", menu=NewOption)
 
 # Add the Other File Menu Options
 FileOption.add_command(label="Open File", command=OpenFile, accelerator="Ctrl+O")
-FileOption.add_command(label="Save File", command=SaveFile, accelerator="Ctrl+S")
+# Make Drop Down Save - Save File Ctrl+S| Save File as Template
+
+# Save Drop Down Option for File Menu
+SaveOption = Menu(FileOption, tearoff=False)
+SaveOption.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
+SaveOption.add_command(label="Save File", command=SaveFile, accelerator="Ctrl+S")
+SaveOption.add_command(label="Save File as Template", command=None)
+
+# Cascade the Other File Menu Options
 FileOption.add_command(label="Save As", command=SaveFileAs, accelerator="Ctrl+Shift+S")
 FileOption.add_separator()
 FileOption.add_checkbutton(label="Auto Save", onvalue=1, offvalue=0, variable=AutoSave_CheckMark, command=AutoSaveInit)
@@ -546,8 +554,6 @@ MenuBar.add_cascade(label="Tools", menu=ToolsOption, underline=0)
 ToolsOption.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
 ToolsOption.add_command(label="Word Count", command=InitWordCount)
 ToolsOption.add_checkbutton(label="Toggle Word Wrap", onvalue=1, offvalue=0, variable=WordWrap_CheckMark, command=ToggleWordWrap, accelerator="Alt-Z")
-ToolsOption.add_separator()
-ToolsOption.add_command(label="Template Manager", command=TemplateManagerFunction)
 
 
 
