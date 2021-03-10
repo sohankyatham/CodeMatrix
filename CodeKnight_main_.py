@@ -31,7 +31,7 @@ SelectedText = False
 def EmptyFile(*args):
     global OpenFileStatusName
     OpenFileStatusName = False
-    # Create a New Tab when new file function occurs
+    # Create a New Tab when new file function occurs 
     TextBox.delete("1.0", END)
     StatusBar.config(text="Code Editor - Untitled.txt")
 root.bind('<Control-n>', EmptyFile)
