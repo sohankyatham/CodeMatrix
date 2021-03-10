@@ -266,13 +266,16 @@ root.bind("<Control-Shift-A>", ToggleBlockComment)
 
 # Word Count Function
 def DeclareWordCount():
+
+    # Turn of Word Wrap if the User Unchecks the Option in the Tools Menu
+
     # Get data in textbox - turns into a string
     TextContent = TextBox.get("1.0", END)
     # String to number 
     CharactersInTextBox = len(TextContent)    
     WordsInTextBox = len(TextContent.split()) 
     # Config in Status Bar
-    StatusBar.config(text="Code Knight - Characters: " + str(CharactersInTextBox-1) + " Words: " + str(WordsInTextBox))
+    StatusBar.config(text=str(CharactersInTextBox-1) + " Characters, " + str(WordsInTextBox) + " Words, ")
 
 def InitWordCount():
     DeclareWordCount()
@@ -553,6 +556,9 @@ RunMenu.add_command(label="Run Python File", command=RunPythonFile)
 
 
 # Check Marks for Options in Tools Menu
+WordCount_CheckMark = BooleanVar()
+WordCount_CheckMark.set(False)
+
 WordWrap_CheckMark = BooleanVar()
 WordWrap_CheckMark.set(False)
 
@@ -562,7 +568,7 @@ WordWrap_CheckMark.set(False)
 ToolsMenu = Menu(MenuBar, tearoff=False)
 MenuBar.add_cascade(label="Tools", menu=ToolsMenu, underline=0)
 ToolsMenu.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
-ToolsMenu.add_command(label="Word Count", command=InitWordCount)
+ToolsMenu.add_checkbutton(label="Word Count", onvalue=1, offvalue=0, variable=WordCount_CheckMark, command=InitWordCount)
 ToolsMenu.add_checkbutton(label="Toggle Word Wrap", onvalue=1, offvalue=0, variable=WordWrap_CheckMark, command=ToggleWordWrap, accelerator="Alt-Z")
 
 
