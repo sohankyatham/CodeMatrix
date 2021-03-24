@@ -10,8 +10,9 @@ from FileTemplates import *
 
 
 # Notes:
-# Work on User Interface for Programs
+# Work on User Interface for Program
 # Fix any errors/bugs
+
 
 
 # Screen
@@ -188,6 +189,27 @@ root.bind("<Control-Key-w>", CloseEditor)
 def ExitProgram(*args):
     root.destroy()
 root.bind("<Control-Key-q>", ExitProgram)
+
+
+
+# File Templates Functions
+
+
+
+# Basic HTML Markup Function
+def Basic_HTML_Markup_Function():
+    global OpenFileStatusName
+    OpenFileStatusName = False
+    TextBox.insert("1.0", Basic_HTML_Markup.strip())
+
+
+
+# Basic PHP File Function
+def Basic_PHP_File_Function():
+    global OpenFileStatusName
+    OpenFileStatusName = False
+    # Insert PHP Template in TextBox
+    TextBox.insert("1.0", Basic_PHP_File.strip())
 
 
 
@@ -418,10 +440,8 @@ FileMenu.add_command(label="New File", command=NewFile)
 # New (from template) Menu - Drop Down with Options for File Menu             
 NewFromTemplate = Menu(FileMenu, tearoff=False)
 NewFromTemplate.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
-NewFromTemplate.add_command(label="file.html", command=None)
-NewFromTemplate.add_command(label="file.php", command=None)
-NewFromTemplate.add_command(label="file.rb", command=None)
-NewFromTemplate.add_command(label="file.tex", command=None)
+NewFromTemplate.add_command(label="file.html", command=Basic_HTML_Markup_Function)
+NewFromTemplate.add_command(label="file.php", command=Basic_PHP_File_Function)
 # Cascade the New Menu to the File Menu
 FileMenu.add_cascade(label="New (from template)", menu=NewFromTemplate)
 
