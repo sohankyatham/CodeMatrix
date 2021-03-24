@@ -3,14 +3,21 @@ from tkinter import *
 from tkinter import filedialog
 from tkinter import font
 from tkinter import ttk
-from TemplateManager import HTML_Basic_Markup, HTML_LoginForm, Tkinter_StartCode
- 
+
+# Importing file templates from other file
+from FileTemplates import *
+
+
+
+# Notes:
+# Work on User Interface for Programs
+# Fix any errors/bugs
 
 
 # Screen
 root = Tk()
 root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
-root.title("Code Editor - Untitled.txt")  # Edit name when 
+root.title("Code Knight")   
 
 
 
@@ -25,17 +32,19 @@ global SelectedText
 SelectedText = False
  
 
- 
-# File Menu Option Functions
-# Empty File Function
+
+# File Menu Functions
+
+
+
+# New File Function
 # Make New tab when this function is passed
-def EmptyFile(*args):
+def NewFile(*args):
     global OpenFileStatusName
     OpenFileStatusName = False
     # Create a New Tab when new file function occurs
-    TextBox.delete("1.0", END)
-    StatusBar.config(text="Code Editor - Untitled.txt")
-root.bind('<Control-n>', EmptyFile)
+    TextBox.delete("1.0", END) 
+root.bind('<Control-Key-n>', NewFile)
  
 
  
@@ -61,7 +70,7 @@ def OpenFile(*args):
     FileContent = FilePath.read()
     TextBox.insert(END, FileContent)
     FilePath.close()
-root.bind('<Control-o>', OpenFile)
+root.bind('<Control-Key-o>', OpenFile)
  
  
 
@@ -79,7 +88,7 @@ def SaveFile(*args):
     # If the file does not exist, then save this file as a file
     else:
         SaveFileAs()
-root.bind('<Control-s>', SaveFile)
+root.bind('<Control-Key-s>', SaveFile)
  
 
  
@@ -244,8 +253,8 @@ root.bind("<Control-Key-a>", SelectAll)
 
 # Run Python Menu Options
 def RunPythonFile(*args):
-    Open_File_To_Run = filedialog.askopenfile(mode="r", title="Select Python File to Run")
-    exec(Open_File_To_Run.read())
+    OpenFileToRun = filedialog.askopenfile(mode="r", title="Select Python File to Run")
+    exec(OpenFileToRun.read())
 
 
 
@@ -273,7 +282,7 @@ def DeclareWordCount():
     CharactersInTextBox = len(TextContent)    
     WordsInTextBox = len(TextContent.split()) 
     # Config in Status Bar
-    StatusBar.config(text=str(CharactersInTextBox-1) + " Characters, " + str(WordsInTextBox) + " Words, ")
+    StatusBar.config(text="Ln 5, Col 6     -     " + str(CharactersInTextBox-1) + " Characters, " + str(WordsInTextBox) + " Words, ")
 
 
 
@@ -283,7 +292,7 @@ def InitWordCount():
         DeclareWordCount()
         StatusBar.after(1, InitWordCount)
     else: 
-        StatusBar.config(text="")
+        StatusBar.config(text="Code Knight")
 
 
 
@@ -302,76 +311,6 @@ def ToggleWordWrap(*args):
         # Turn off Check Mark if the Function is disabled
         WordWrap_CheckMark.set(False)
 root.bind("<Alt-Key-z>", ToggleWordWrap)
-
-
-
-# Template Manager Function
-def TemplateManager(*args):
-    TemplateManagerWindow = Toplevel(root)
-    TemplateManagerWindow.geometry("500x500")
-    TemplateManagerWindow.title("Template Manager")
-
-    # HTML Templates
-    def HTML_Basic_MarkupFunction(*args):
-        global OpenFileStatusName
-        OpenFileStatusName = False
-        # Create a New Tab when new file function occurs
-        TextBox.delete("1.0", END)
-        # Insert the Template
-        TextBox.insert("1.0", HTML_Basic_Markup)
-    
-    def HTML_LoginForm_Function(*args):
-        global OpenFileStatusName
-        OpenFileStatusName = False
-        # Create a New Tab when new file function occurs
-        TextBox.delete("1.0", END)
-        # Insert the Template
-        TextBox.insert("1.0", HTML_LoginForm)
-
-    HTML_HeaderText = Label(TemplateManagerWindow, text="HTML", fg="Black", font=("Helvetica", 16))
-    HTML_HeaderText.pack()
-
-    # Buttons for HTML Templates
-    HTML_StartFile = Button(TemplateManagerWindow, text="Basic Markup", bg="Royalblue", fg="White", command=HTML_Basic_MarkupFunction)
-    HTML_StartFile.pack()
-
-    HTML_LoginFormBtn = Button(TemplateManagerWindow, text="Login Form", bg="Royalblue", fg="White", command=HTML_LoginForm_Function)
-    HTML_LoginFormBtn.pack(pady=5)
-
-    #Python Templates
-    def Tkinter_StartCodeFunction():
-        global OpenFileStatusName
-        OpenFileStatusName = False
-        # Create a New Tab when new file function occurs
-        TextBox.delete("1.0", END)
-        # Insert the Template
-        TextBox.insert("1.0", Tkinter_StartCode)
-    
-    Python_HeaderText = Label(TemplateManagerWindow, text="Python", fg="Black", font=("Helvetica", 16))
-    Python_HeaderText.pack(pady=10)
-    
-    # Buttons for Python Templates
-    Tkinter_SetupBtn = Button(TemplateManagerWindow, text="Tkinter Starting Code", bg="Royalblue", fg="White", command=Tkinter_StartCodeFunction)
-    Tkinter_SetupBtn.pack()
-
-    # Java Templates
-    def JAVA_StartFileFunction():
-        JAVA_StartFile = "public class untitled { \n\n\t public static void main (String[] args) { \n\n\t } \n }"
-        global OpenFileStatusName
-        OpenFileStatusName = False  
-        # Create a New Tab when new file function occurs
-        TextBox.delete("1.0", END)
-        # Insert the Template
-        TextBox.insert("1.0", JAVA_StartFile)
-    
-    Java_HeaderText = Label(TemplateManagerWindow, text="Java", fg="Black", font=("Helvetica", 16))
-    Java_HeaderText.pack(pady=10)
-
-    # Buttons for Java Template
-    JAVA_StartFileBtn = Button(TemplateManagerWindow, text="Staring Code", bg="Royalblue", fg="White", command=JAVA_StartFileFunction)
-    JAVA_StartFileBtn.pack()
-
-    TemplateManagerWindow.mainloop()
 
 
 
@@ -417,7 +356,7 @@ def AboutScreen():
 # Add stuff like word count, character count, what the location of the mouse is like for eg: Ln 22, Col 2
 # Status Bar
 StatusBar = Label(root, text="Code Knight", anchor=W)
-StatusBar.config(bg="dodgerblue")
+StatusBar.config(bg="Dodgerblue")
 StatusBar.pack(fill=X, side=BOTTOM, ipady=2)
 
 
@@ -474,20 +413,23 @@ FileMenu = Menu(MenuBar, tearoff=False)
 MenuBar.add_cascade(label="File", menu=FileMenu, underline=0)
 FileMenu.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
 
-# New Menu - Drop Down with Options for File Menu             
-NewMenu = Menu(FileMenu, tearoff=False)
-NewMenu.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
-NewMenu.add_command(label="Empty File", command=EmptyFile, accelerator="Ctrl+N")
-NewMenu.add_command(label="From Template", command=TemplateManager)
+FileMenu.add_command(label="New File", command=NewFile)
+
+# New (from template) Menu - Drop Down with Options for File Menu             
+NewFromTemplate = Menu(FileMenu, tearoff=False)
+NewFromTemplate.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
+NewFromTemplate.add_command(label="file.html", command=None)
+NewFromTemplate.add_command(label="file.php", command=None)
+NewFromTemplate.add_command(label="file.rb", command=None)
+NewFromTemplate.add_command(label="file.tex", command=None)
 # Cascade the New Menu to the File Menu
-FileMenu.add_cascade(label="New", menu=NewMenu)
+FileMenu.add_cascade(label="New (from template)", menu=NewFromTemplate)
 
 # Add the Other File Menu Options
 FileMenu.add_command(label="Open File", command=OpenFile, accelerator="Ctrl+O") # Add Open Folder & Open Recent
 FileMenu.add_separator()
 FileMenu.add_command(label="Save", command=SaveFile, accelerator='Ctrl+S')
 FileMenu.add_command(label="Save As", command=SaveFileAs, accelerator="Ctrl+Shift+S")
-FileMenu.add_command(label="Save File as Template", command=None)
 FileMenu.add_separator()
 FileMenu.add_checkbutton(label="Auto Save", onvalue=1, offvalue=0, variable=AutoSave_CheckMark, command=AutoSaveInit)
 
@@ -496,13 +438,12 @@ PreferencesMenu = Menu(FileMenu, tearoff=False)
 PreferencesMenu.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
 PreferencesMenu.add_command(label="Color Theme", command=ColorTheme)
 PreferencesMenu.add_command(label="Keyboard Shortcuts", command=None)
-PreferencesMenu.add_command(label="Template Manager", command=TemplateManager)
 # Cascade the Preferences Menu to the File Menu
 FileMenu.add_cascade(label="Preferences", menu=PreferencesMenu)
 FileMenu.add_separator()
 
 # Add the Other File Menu Options
-FileMenu.add_command(label="Close Editor", command=CloseEditor)
+FileMenu.add_command(label="Close Editor", command=CloseEditor, accelerator="Ctrl+W")
 FileMenu.add_command(label="Exit", command=ExitProgram, accelerator="Ctrl+Q")
 
 
@@ -517,6 +458,9 @@ EditMenu.add_separator()
 EditMenu.add_command(label="Cut", command=lambda: CutText(False), accelerator="Ctrl+X")
 EditMenu.add_command(label="Copy", command=lambda: CopyText(False), accelerator="Ctrl+C")
 EditMenu.add_command(label="Paste", command=lambda: PasteText(False), accelerator="Ctrl+V")
+EditMenu.add_separator()
+# Create Find and Replace Function          
+EditMenu.add_command(label="Find & Replace", command=None, accelerator="Ctrl+F")
 EditMenu.add_separator()
 EditMenu.add_command(label="Toggle Line Comment", command=ToggleLineComment, accelerator="Ctrl+/")
 EditMenu.add_command(label="Toggle Block Comment", command=ToggleBlockComment, accelerator="Ctrl+Shift-A")
