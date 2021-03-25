@@ -1,8 +1,8 @@
 # Imports
 from tkinter import *
 from tkinter import filedialog
-from tkinter import font
 from tkinter import ttk
+import tkinter.font as tkfont
 
 # Importing file templates from other file
 from FileTemplates import *
@@ -193,13 +193,15 @@ root.bind("<Control-Key-q>", ExitProgram)
 
 
 # File Templates Functions
-
+                     
 
 
 # Basic HTML Markup Function
 def Basic_HTML_Markup_Function():
     global OpenFileStatusName
     OpenFileStatusName = False
+    # Delete Previous Content and Insert HTML Template in TextBox
+    TextBox.delete("1.0", END)
     TextBox.insert("1.0", Basic_HTML_Markup.strip())
 
 
@@ -208,8 +210,39 @@ def Basic_HTML_Markup_Function():
 def Basic_PHP_File_Function():
     global OpenFileStatusName
     OpenFileStatusName = False
-    # Insert PHP Template in TextBox
+    # Delete Previous Content and Insert PHP Template in TextBox
+    TextBox.delete("1.0", END)
     TextBox.insert("1.0", Basic_PHP_File.strip())
+
+
+
+# C++ Start File Function
+def C_Plus_Plus_StartFile_Function():
+    global OpenFileStatusName
+    OpenFileStatusName = False
+    # Delete Previous Content and Insert C++ Template in TextBox
+    TextBox.delete("1.0", END)
+    TextBox.insert("1.0", C_Plus_Plus_StartFile.strip())
+
+
+
+# JAVA Start File Function
+def JAVA_Start_File_Function():
+    global OpenFileStatusName
+    OpenFileStatusName = False
+    # Delete Previous Content and Insert JAVA Template in TextBox
+    TextBox.delete("1.0", END)
+    TextBox.insert("1.0", JAVA_Start_File.strip())
+
+
+
+# Python Start File Function
+def Python_Start_File_Function():
+    global OpenFileStatusName
+    OpenFileStatusName = False
+    # Delete Previous Content and Insert Python Template in TextBox
+    TextBox.delete("1.0", END)
+    TextBox.insert("1.0", Python_Start_File.strip())
 
 
 
@@ -405,7 +438,12 @@ HorizontalScrollbar.pack(side=BOTTOM, fill=X)
 TextBox = Text(MainFrame, width=500, font=("Courier New", 16), selectbackground="Skyblue", undo=True, wrap="none", yscrollcommand=VerticalScrollbar.set, xscrollcommand=HorizontalScrollbar.set)
 TextBox.pack(fill=BOTH)
 
-
+# Set Tab Size for Text Box - Default is 4 Spaces
+font = tkfont.Font(font=TextBox['font'])
+TabSize = font.measure("    ")
+TextBox.config(tabs=TabSize)
+    
+    
 
 # Configuring the Vertical Scrollbar
 VerticalScrollbar.config(command=TextBox.yview)
@@ -442,6 +480,9 @@ NewFromTemplate = Menu(FileMenu, tearoff=False)
 NewFromTemplate.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
 NewFromTemplate.add_command(label="file.html", command=Basic_HTML_Markup_Function)
 NewFromTemplate.add_command(label="file.php", command=Basic_PHP_File_Function)
+NewFromTemplate.add_command(label="main.cxx", command=C_Plus_Plus_StartFile_Function)
+NewFromTemplate.add_command(label="main.java", command=JAVA_Start_File_Function)
+NewFromTemplate.add_command(label="main.py", command=Python_Start_File_Function)
 # Cascade the New Menu to the File Menu
 FileMenu.add_cascade(label="New (from template)", menu=NewFromTemplate)
 
@@ -479,8 +520,8 @@ EditMenu.add_command(label="Cut", command=lambda: CutText(False), accelerator="C
 EditMenu.add_command(label="Copy", command=lambda: CopyText(False), accelerator="Ctrl+C")
 EditMenu.add_command(label="Paste", command=lambda: PasteText(False), accelerator="Ctrl+V")
 EditMenu.add_separator()
-# Create Find and Replace Function          
-EditMenu.add_command(label="Find & Replace", command=None, accelerator="Ctrl+F")
+# Work on Find and Replace Function; Add some other feature to go with the menu       
+EditMenu.add_command(label="Find & Replace", command=None, accelerat or="Ctrl+F")
 EditMenu.add_separator()
 EditMenu.add_command(label="Toggle Line Comment", command=ToggleLineComment, accelerator="Ctrl+/")
 EditMenu.add_command(label="Toggle Block Comment", command=ToggleBlockComment, accelerator="Ctrl+Shift-A")
