@@ -521,7 +521,7 @@ EditMenu.add_command(label="Copy", command=lambda: CopyText(False), accelerator=
 EditMenu.add_command(label="Paste", command=lambda: PasteText(False), accelerator="Ctrl+V")
 EditMenu.add_separator()
 # Work on Find and Replace Function; Add some other feature to go with the menu       
-EditMenu.add_command(label="Find & Replace", command=None, accelerat or="Ctrl+F")
+EditMenu.add_command(label="Find & Replace", command=None, accelerator="Ctrl+F")
 EditMenu.add_separator()
 EditMenu.add_command(label="Toggle Line Comment", command=ToggleLineComment, accelerator="Ctrl+/")
 EditMenu.add_command(label="Toggle Block Comment", command=ToggleBlockComment, accelerator="Ctrl+Shift-A")
