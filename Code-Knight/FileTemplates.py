@@ -1,4 +1,9 @@
 # Basic File Templates for Code Knight
+'''
+Notes:
+Add more file templates:
+file.tkinter
+'''
 
 
 
@@ -40,4 +45,40 @@ Basic_PHP_File = """
     
 </body>
 </html>
+"""
+
+
+
+# C++ Start File Template
+C_Plus_Plus_StartFile = """
+#include <iostream>
+
+int main()
+{
+    return 0;
+}
+"""
+
+
+
+# Java Start File Template
+JAVA_Start_File = """
+public class untitled {
+	
+	public static void main (String[] args) {
+		
+	}
+}
+"""
+
+
+
+# Python Start File Template
+Python_Start_File = """
+def main(args):
+    return 0
+
+if __name__ == '__main__':
+    import sys
+    sys.exit(main(sys.argv))
 """
