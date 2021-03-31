@@ -9,12 +9,6 @@ from FileTemplates import *
 
 
 
-# Notes:
-# Work on User Interface for Program
-# Fix any errors/bugs
-
-
-
 # Screen
 root = Tk()
 root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
@@ -435,7 +429,7 @@ HorizontalScrollbar.pack(side=BOTTOM, fill=X)
 
 
 # Text Box               Change width to fit other stuff in future versions
-TextBox = Text(MainFrame, width=500, font=("Courier New", 16), selectbackground="Skyblue", undo=True, wrap="none", yscrollcommand=VerticalScrollbar.set, xscrollcommand=HorizontalScrollbar.set)
+TextBox = Text(MainFrame, width=500, font=("Consolas", 16), selectbackground="Skyblue", undo=True, wrap="none", yscrollcommand=VerticalScrollbar.set, xscrollcommand=HorizontalScrollbar.set)
 TextBox.pack(fill=BOTH)
 
 # Set Tab Size for Text Box - Default is 4 Spaces
