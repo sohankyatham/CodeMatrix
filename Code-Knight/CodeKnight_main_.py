@@ -4,12 +4,12 @@ from tkinter import filedialog
 from tkinter import ttk
 import tkinter.font as tkfont
 
-# Importing file templates from other file
+# Importing File Templates from FileTemplates.py
 from FileTemplates import *
 
 
 
-# Screen
+# Window
 root = Tk()
 root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
 root.title("Code Knight")   
@@ -395,6 +395,30 @@ def AboutScreen():
 
 
 
+# WORK ON USER INTERFACE FOR SETTINGS WINDOW
+# Function for Settings Window
+def SettingsWindowFunc():
+    # Window
+    SettingsWindow = Toplevel(root)
+    SettingsWindow.geometry("600x600")
+    SettingsWindow.title("Settings Window")
+
+    # Theme Label
+    ThemeLabel = Label(SettingsWindow, text="Theme")
+    ThemeLabel.pack()
+
+    # Editor: Font Family Label
+    EditorFontFamily = Label(SettingsWindow, text="Editor Font Family")
+    EditorFontFamily.pack()
+
+    # Editor: Font Size Label
+    EditorFontSize = Label(SettingsWindow, text="Editor Font Size")
+    EditorFontSize.pack()
+
+    # Mainloop
+    SettingsWindow.mainloop()
+
+
 # For future versions - add tabs so users can work with multiple files at once
 # Tab Control --- place for adding new tab
 # TabControl = ttk.Notebook(root)
@@ -585,7 +609,7 @@ HelpMenu.add_separator()
 HelpMenu.add_command(label="Report Issue")
 HelpMenu.add_command(label="View License")
 HelpMenu.add_separator()
-HelpMenu.add_command(label="Settings", command=None)    # Create new window that has the settings options; For future versions create a tab in the IDE for the settings option
+HelpMenu.add_command(label="Settings", command=SettingsWindowFunc)    # Create new window that has the settings options; For future versions create a tab in the IDE for the settings option
 HelpMenu.add_command(label="About", command=AboutScreen)
 
 
