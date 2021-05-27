@@ -1,3 +1,22 @@
+'''
+Create UserInfo.py 
+This will store all the User Information; i.e If user have autosave turned on, if user has word wrap turned  on,
+to see which color theme the user has, see if user has word count turned on, and apply settings.
+'''
+
+'''
+from UserInfo.py import *
+
+# Create a value if autosave is on - get the value from UserInfo.py, 
+# If autosave is turned on then, UserInfo.py.write(auto is turned on)
+# then from CodeKnight_main_.py get the value to see if autosave was turned on
+# Call this function in a mainloop
+if autosave value = on:
+    call the autosave function
+if autosave value = off:
+    disable the autosave function
+'''
+
 # Imports
 from tkinter import *
 from tkinter import filedialog
@@ -19,6 +38,12 @@ root.title("Code Knight")
 # Global OpenStatusName - used for finding name and status of opened file and use it for saving file and etc
 global OpenFileStatusName
 OpenFileStatusName = False
+
+
+
+# File Type Variable - used for finding the file type of the file (i.e .py for Python, .html for HTML)
+global FileType
+FileType = ""
 
 
 
@@ -47,17 +72,14 @@ root.bind('<Control-Key-n>', NewFile)
 def OpenFile(*args):
     # Ask user for which file they want to open
     FilePath = filedialog.askopenfilename(initialdir="C:/gui/", title="Open a File", filetypes=(("All Files", "*.*"), ("Text Files", "*.txt"), ("HTML Files", "*.html"), ("CSS Files", "*.css"),("JavaScript Files", "*.js"), ("Python Files", "*.py")))
-    
+    print(FilePath)
     # Check to see if there is a file opened, then find the name and status of the file and use it in code for other things like saving a file and accessing it later
     if FilePath:
         global OpenFileStatusName
+        global FileType
         OpenFileStatusName = FilePath
+        FileType = OpenFileStatusName
     
-    # Set a name for the File Path
-    FileName = FilePath
-    
-    # Configure the title and Replace the directory with the file name # CHANGE TO FILEPATH AND TEST
-    FileName = FileName.replace("C:/gui/", "")
     TextBox.delete("1.0", END)
     
     # Open File and Insert File Content into Editor
@@ -91,8 +113,8 @@ root.bind('<Control-Key-s>', SaveFile)
 def SaveFileAs(*args):
     FilePath = filedialog.asksaveasfilename(defaultextension=".*", initialdir="C:/gui/", title="Save File As", filetypes=(("All Files", "*.*"), ("Text Files", "*.txt"), ("HTML Files", "*.html"), ("CSS Files", "*.css"), ("JavaScript Files", "*.js"), ("Python Files", "*.py")))
     if FilePath:
-        FileName = FilePath
-        FileName = FileName.replace("C:/gui/", "")
+        global FileType
+        FileType = FilePath
         # Save the File
         FilePath = open(FilePath, "w")
         FilePath.write(TextBox.get(1.0, END))
@@ -114,7 +136,7 @@ def AutoSaveDeclare():
 # Initialize Auto Save Function
 def AutoSaveInit():
     AutoSaveDeclare()
-    TextBox.after(1, AutoSaveInit)
+    TextBox.after(1000, AutoSaveInit)
 
 
 
@@ -134,7 +156,7 @@ def ColorTheme():
     def DefaultTheme():
         TextBox.config(bg="White", fg="Black")
         MenuBar.config(bg="White", fg="Black")
-        StatusBar.config(bg="dodgerblue")
+        StatusBar.config(bg="Dodgerblue")
 
     DefaultThemeBtn = Button(ColorThemeWindow, text="Default Theme", command=DefaultTheme)
     DefaultThemeBtn.pack()
@@ -302,6 +324,8 @@ root.bind("<Control-Key-a>", SelectAll)
 
 # Run Python Menu Options
 def RunPythonFile(*args):
+    global OpenFileStatusName
+
     OpenFileToRun = filedialog.askopenfile(mode="r", title="Select Python File to Run")
     exec(OpenFileToRun.read())
 
@@ -323,13 +347,13 @@ root.bind("<Control-Shift-A>", ToggleBlockComment)
 
 
 
-# Declare Word Count Function
+# Declare Word Count and Character Count Function
 def DeclareWordCount():
     # Get data in textbox - turn into a string
-    TextContent = TextBox.get("1.0", END)
+    TextContent_ForWordCount = TextBox.get("1.0", END)
     # String to number 
-    CharactersInTextBox = len(TextContent)    
-    WordsInTextBox = len(TextContent.split()) 
+    CharactersInTextBox = len(TextContent_ForWordCount)    
+    WordsInTextBox = len(TextContent_ForWordCount.split()) 
     # Config in Status Bar
     StatusBar.config(text="Ln 5, Col 6     -     " + str(CharactersInTextBox-1) + " Characters, " + str(WordsInTextBox) + " Words, ")
 
@@ -403,18 +427,21 @@ def SettingsWindowFunc():
     SettingsWindow.geometry("600x600")
     SettingsWindow.title("Settings Window")
 
-    # Theme Label
-    ThemeLabel = Label(SettingsWindow, text="Theme")
-    ThemeLabel.pack()
+    '''
+    Create Tabs:
+        Text Editor:
+            Font Family
+            Font Size
+            Font Weight
+            Cursor Options
+            Auto Save Checkbox
+            Auto Save Delay
+            Word Wrap
+            Tab Size
+            
 
-    # Editor: Font Family Label
-    EditorFontFamily = Label(SettingsWindow, text="Editor Font Family")
-    EditorFontFamily.pack()
-
-    # Editor: Font Size Label
-    EditorFontSize = Label(SettingsWindow, text="Editor Font Size")
-    EditorFontSize.pack()
-
+    
+    '''
     # Mainloop
     SettingsWindow.mainloop()
 
@@ -453,7 +480,7 @@ HorizontalScrollbar.pack(side=BOTTOM, fill=X)
 
 
 # Text Box               Change width to fit other stuff in future versions
-TextBox = Text(MainFrame, width=500, font=("Consolas", 16), selectbackground="Skyblue", undo=True, wrap="none", yscrollcommand=VerticalScrollbar.set, xscrollcommand=HorizontalScrollbar.set)
+TextBox = Text(MainFrame, width=500, font=("DejaVu Sans Mono", 16), selectbackground="Skyblue", undo=True, wrap="none", yscrollcommand=VerticalScrollbar.set, xscrollcommand=HorizontalScrollbar.set)
 TextBox.pack(fill=BOTH)
 
 # Set Tab Size for Text Box - Default is 4 Spaces
@@ -515,6 +542,7 @@ FileMenu.add_checkbutton(label="Auto Save", onvalue=1, offvalue=0, variable=Auto
 # Preferences Menu - Drop Down with Options for File Menu             
 PreferencesMenu = Menu(FileMenu, tearoff=False)
 PreferencesMenu.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
+PreferencesMenu.add_command(label="Settings", command=SettingsWindowFunc)
 PreferencesMenu.add_command(label="Color Theme", command=ColorTheme)
 PreferencesMenu.add_command(label="Keyboard Shortcuts", command=None)
 # Cascade the Preferences Menu to the File Menu
@@ -609,7 +637,6 @@ HelpMenu.add_separator()
 HelpMenu.add_command(label="Report Issue")
 HelpMenu.add_command(label="View License")
 HelpMenu.add_separator()
-HelpMenu.add_command(label="Settings", command=SettingsWindowFunc)    # Create new window that has the settings options; For future versions create a tab in the IDE for the settings option
 HelpMenu.add_command(label="About", command=AboutScreen)
 
 
