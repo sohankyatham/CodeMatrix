@@ -145,49 +145,76 @@ def AutoSaveInit():
 
 
 # Keyboard Shortcuts Function
-def ColorTheme():
-    # For Future Versions - place functions in seperate file called CodeEditorThemes.py
-    # Add commands and place functions in this function
+
+
+
+# Choose Color Theme Function
+def ChooseColorTheme():
+    # Color Theme Window
     ColorThemeWindow = Toplevel(root)
-    ColorThemeWindow.geometry("300x300")
+    ColorThemeWindow.geometry("250x150")
     ColorThemeWindow.title("Color Theme")
+    ColorThemeWindow.resizable(0,0)
+
+    # Cancel Color Theme Function
+    def CancelColorThemeFunc():
+        ColorThemeWindow.destroy()
+
+    # Color Theme Function
+    def ColorThemeFunc():
+        # Get the Value from the Combobox
+        ColorTheme = SelectedColorTheme.get()
+        # Set the Default Theme
+        if ColorTheme == "Default":
+            print("Default Color Theme Activated")
+        # Set the Light Theme
+        if ColorTheme == "Light (Code Knight)":
+            print("Light Color Theme Activated")
+        # Set the Dark Theme
+        if ColorTheme == "Dark (Code Knight)":
+            print("Dark Color Theme Activated")
+        # Set the Red Theme
+        if ColorTheme == "Red":
+            TextBox.config(bg="Red", fg="White", selectbackground="Dodgerblue")
+            MenuBar.config(bg="Red", fg="Black")
+            StatusBar.config(bg="Red")
+            
+
+    # Color Theme Label
+    ColorThemeLabel = Label(ColorThemeWindow, text="Color Theme", font=("Arial", 16))
+    ColorThemeLabel.pack()
+
+    # Set the SelectedColorTheme to a String Value
+    SelectedColorTheme = StringVar()
+
+    # Color Theme Combobox for selecting a Color Theme
+    ColorTheme = ttk.Combobox(ColorThemeWindow, width=16, textvariable=SelectedColorTheme, font=("Arial", 11))
+    ColorTheme.pack(pady=20)
+
+    # Value for Color Themes
+    ColorTheme["values"] = [
+        "Default",
+        "Light (Code Knight)",
+        "Dark (Code Knight)",
+        "Red",
+    ]
+
+    # Set Default Theme to the 0th Value from ColorTheme["values"]
+    ColorTheme.current(0)
+
+    # Frame for Placing Cancel and Ok button on ColorThemeWindow 
+    ColorThemeBtns_Frame = Frame(ColorThemeWindow)
+    ColorThemeBtns_Frame.pack()
+
+    # Cancel Button
+    CancelBtn = Button(ColorThemeBtns_Frame, text="Cancel", width=6, font=("Arial", 11), command=CancelColorThemeFunc)
+    CancelBtn.grid(row=0, column=0)
+
+    # Ok Button
+    OkBtn = Button(ColorThemeBtns_Frame, text="Ok", width=6, font=("Arial", 11), command=ColorThemeFunc)
+    OkBtn.grid(row=0, column=1)
     
-    # Default Theme
-    def DefaultTheme():
-        TextBox.config(bg="White", fg="Black")
-        MenuBar.config(bg="White", fg="Black")
-        StatusBar.config(bg="Dodgerblue")
-
-    DefaultThemeBtn = Button(ColorThemeWindow, text="Default Theme", command=DefaultTheme)
-    DefaultThemeBtn.pack()
-
-    # Light Theme
-    def LightTheme():
-        TextBox.config(bg="Whitesmoke", fg="Black")
-        MenuBar.config(bg="White", fg="Black")
-        StatusBar.config(bg="White")
-
-    LightThemeBtn = Button(ColorThemeWindow, text="Light Theme", command=LightTheme)
-    LightThemeBtn.pack()
-
-    # Dark Theme
-    def DarkTheme():
-        TextBox.config(bg="Black", fg="White")
-        MenuBar.config(bg="#332a2a", fg="White")
-        StatusBar.config(bg="dodgerblue")
-
-    DarkThemeBtn = Button(ColorThemeWindow, text="Dark Theme", command=DarkTheme)
-    DarkThemeBtn.pack()
-
-    # Blue Theme
-    def BlueTheme():
-        TextBox.config(bg="#187980", fg="White")
-        MenuBar.config(bg="White", fg="Black")
-        StatusBar.config(bg="dodgerblue")
-
-    BlueThemeBtn = Button(ColorThemeWindow, text="Blue Theme", command=BlueTheme)
-    BlueThemeBtn.pack()
-    # Main Loop for Color Theme
+    # Main Loop for Color Theme Window
     ColorThemeWindow.mainloop()
 
 
@@ -397,21 +424,23 @@ def AboutScreen():
     AboutScreenPopUp = Toplevel(root)
     AboutScreenPopUp.title("About")
     AboutScreenPopUp.geometry("300x300")
+    AboutScreenPopUp.resizable(0,0)
+    #AboutScreenPopUp.transient(1)
 
     # Header
-    AboutHeader = Label(AboutScreenPopUp, text="Code Knight", font=("Helvetica", 30))
+    AboutHeader = Label(AboutScreenPopUp, text="Code Knight", font=("Arial", 30))
     AboutHeader.pack(pady=25)
 
     # Attribution
-    AboutHeaderAttribtion = Label(AboutScreenPopUp, text="By: Sohan Kyatham", font=("Helvetica", 12))
+    AboutHeaderAttribtion = Label(AboutScreenPopUp, text="By: Sohan Kyatham", font=("Arial", 12))
     AboutHeaderAttribtion.pack()
 
     # Version
-    AboutVersion = Label(AboutScreenPopUp, text="Version: 1.0.0", font=("Helvetica", 12))
+    AboutVersion = Label(AboutScreenPopUp, text="Version: 1.0.0", font=("Arial", 12))
     AboutVersion.pack()
 
     # Operating System Version
-    AboutOS = Label(AboutScreenPopUp, text="OS: Linux", font=("Helvetica", 12))
+    AboutOS = Label(AboutScreenPopUp, text="OS: Linux", font=("Arial", 12))
     AboutOS.pack()
 
     # Mainloop
@@ -543,7 +572,7 @@ FileMenu.add_checkbutton(label="Auto Save", onvalue=1, offvalue=0, variable=Auto
 PreferencesMenu = Menu(FileMenu, tearoff=False)
 PreferencesMenu.config(bg="White", fg="Black", activebackground="Whitesmoke", activeforeground="Black", activeborderwidth=1, font=('Monaco', 11))
 PreferencesMenu.add_command(label="Settings", command=SettingsWindowFunc)
-PreferencesMenu.add_command(label="Color Theme", command=ColorTheme)
+PreferencesMenu.add_command(label="Color Theme", command=ChooseColorTheme)
 PreferencesMenu.add_command(label="Keyboard Shortcuts", command=None)
 # Cascade the Preferences Menu to the File Menu
 FileMenu.add_cascade(label="Preferences", menu=PreferencesMenu)
