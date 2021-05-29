@@ -1,5 +1,5 @@
 '''
-Create UserInfo.py 
+Create UserInfo.py  
 This will store all the User Information; i.e If user have autosave turned on, if user has word wrap turned  on,
 to see which color theme the user has, see if user has word count turned on, and apply settings.
 '''
